@@ -290,7 +290,7 @@ th{background:#f7f9fc;color:#526071;position:sticky;top:0;z-index:1}
     </div>
   </section>
 
-  <div class="footer">丙級練習教室登記系統 V3</div>
+  <div class="footer">丙級練習教室登記系統 V3.3</div>
 </div>
 
 <div class="modal" id="editModal">
@@ -413,25 +413,86 @@ document.getElementById("submitBtn").onclick=async()=>{
   const name=document.getElementById("name").value.trim();
   const phone=document.getElementById("phone").value.trim();
   const note=document.getElementById("note").value.trim();
+
   if(!selectedCourse) return showMsg("請先選擇練習項目","err");
   if(!name) return showMsg("請填寫姓名","err");
 
+  const digits=phone.replace(/\D/g,"");
+  if(!/^09\d{8}$/.test(digits)){
+    return showMsg("請輸入正確手機號碼，例如：0912345678","err");
+  }
+
   const btn=document.getElementById("submitBtn");
+  const courseId=selectedCourse;
+  const before=publicData.courses?.[courseId] || {count:0,waitlist:0,full:false};
+
   try{
-    btn.disabled=true;btn.textContent="送出中…";
-    const data=await postApi({action:"register",courseId:selectedCourse,name,phone,note});
-    if(data.bookingStatus==="候補"){
-      showMsg(`已加入候補｜報名編號：${data.bookingId}｜目前候補第 ${data.waitlistPosition} 位`,"wait");
-    }else{
-      showMsg(`登記成功｜報名編號：${data.bookingId}｜目前正式名額 ${data.count} / ${MAX}`,"ok");
+    btn.disabled=true;
+    btn.textContent="資料送出中…";
+    showMsg("資料送出中，請勿重複按送出。","wait");
+
+    // GitHub Pages / LINE / Safari 對 Apps Script 的 POST 回應可能出現跨網域誤判。
+    // 使用 no-cors：只把資料送到 Apps Script，不讀取 POST 回應。
+    await fetch(API_URL,{
+      method:"POST",
+      mode:"no-cors",
+      redirect:"follow",
+      body:JSON.stringify({
+        action:"register",
+        courseId,
+        name,
+        phone:digits,
+        note
+      })
+    });
+
+    // 等待後端寫入 Google Sheet
+    await new Promise(r=>setTimeout(r,1500));
+
+    // 再透過公開 GET 重新取得名額
+    let refreshed=false;
+    for(let i=0;i<3;i++){
+      try{
+        await getPublic();
+        refreshed=true;
+        break;
+      }catch(e){
+        await new Promise(r=>setTimeout(r,900));
+      }
     }
+
+    renderCourses();
+
+    const after=publicData.courses?.[courseId] || before;
+
     document.getElementById("name").value="";
     document.getElementById("phone").value="";
     document.getElementById("note").value="";
     selectedCourse=null;
-    await refreshPublic();
-  }catch(e){showMsg("送出失敗："+e.message,"err");}
-  finally{btn.textContent="送出登記";updateSummary();}
+
+    if(refreshed && Number(after.count)>Number(before.count)){
+      showMsg(`登記完成，目前正式名額 ${after.count} / ${MAX}。請勿重複送出。`,"ok");
+    }else if(refreshed && (before.full || after.full)){
+      showMsg("登記資料已送出。正式名額已滿時，系統會自動列入候補；請勿重複送出。","ok");
+    }else{
+      showMsg("登記資料已送出，系統正在處理。請勿重複送出；稍後重新整理即可確認最新名額。","ok");
+    }
+
+    btn.textContent="已送出，請勿重複登記";
+
+    // 防止學員連續重複送出
+    await new Promise(r=>setTimeout(r,5000));
+
+  }catch(e){
+    showMsg("目前無法連線，請檢查手機網路後再試一次。","err");
+  }finally{
+    btn.textContent="送出登記";
+    try{
+      await getPublic();
+      renderCourses();
+    }catch(e){}
+    updateSummary();
+  }
 };
 
 document.querySelectorAll(".tab").forEach(btn=>{

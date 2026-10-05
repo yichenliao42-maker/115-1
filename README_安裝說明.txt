@@ -127,3 +127,12 @@ https://script.google.com/macros/s/AKfycbxWtm1knsQuoSCE65-cKnA-_qMWWfO33dK7KS2fr
 
 
 V3.2 更新：學員頁底部說明已改為「三、租借流程與安全注意事項」，其餘功能不變。
+
+
+V3.3 更新：GitHub Pages / LINE / Safari 手機相容
+--------------------------------------------------
+- 學員送出改為 no-cors POST，避免「實際已寫入 Google Sheet，但手機顯示 Failed to fetch」。
+- POST 後約 1.5 秒重新讀取公開名額。
+- 送出後暫時鎖住按鈕 5 秒，避免學員重複按送出。
+- 若無法即時確認，不再顯示「送出失敗」，改提示資料已送出、稍後重新整理。
+- 管理員功能與 Apps Script Code.gs 不變。
