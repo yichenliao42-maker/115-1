@@ -1,616 +1,82 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>丙級術科練習｜教室租借登記</title>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>丙級術科練習登記</title>
 <style>
-:root {
-  --navy:#0d3155;
-  --blue:#1B4B8F;
-  --blue2:#2764aa;
-  --orange:#F5A623;
-  --cream:#fff9e9;
-  --paper:#fffdf7;
-  --text:#162033;
-  --muted:#6d7787;
-  --line:#e8dfcf;
-  --green:#137a52;
-  --red:#b42318;
-  --purple:#6e56cf;
-  --shadow:0 16px 50px rgba(28,43,66,.10);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at top left,rgba(245,166,35,.13),transparent 25%),
-    linear-gradient(180deg,#fff8e6 0%,#f7f9fc 62%,#f4f7fb 100%);
-}
-button,input,textarea,select{font:inherit}
-.wrap{max-width:1100px;margin:auto;padding:24px 18px 60px}
-.hero{
-  position:relative;overflow:hidden;
-  background:linear-gradient(135deg,#0b3154 0%,#0f5a88 100%);
-  color:white;border-radius:28px;padding:34px;
-  box-shadow:0 20px 60px rgba(13,49,85,.22)
-}
-.hero:after{
-  content:"";position:absolute;width:310px;height:310px;border-radius:50%;
-  right:-90px;top:-120px;background:rgba(255,255,255,.08)
-}
-.eyebrow{
-  display:inline-flex;padding:7px 12px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.10);
-  font-size:13px;font-weight:800
-}
-h1{font-size:34px;line-height:1.2;margin:15px 0 8px}
-.hero p{margin:0;color:#dceeff;font-weight:700}
-.price{margin-top:18px;font-size:18px;font-weight:900}
-.price strong{font-size:38px;color:#ffc05c}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
-.tab{
-  border:none;border-radius:14px;padding:14px;font-weight:900;cursor:pointer;
-  background:#ffe9d8;color:#65452d
-}
-.tab.active{background:#0f5a88;color:#fff}
-.panel{display:none}
-.panel.active{display:block}
-.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.course{
-  background:rgba(255,255,255,.88);border:2px solid transparent;border-radius:20px;
-  padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:.2s
-}
-.course:hover{transform:translateY(-2px)}
-.course.selected{border-color:var(--orange);box-shadow:0 16px 45px rgba(245,166,35,.18)}
-.course h3{margin:10px 0 4px;font-size:24px;color:var(--blue)}
-.pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:#edf5ff;color:#225a98;font-size:12px;font-weight:900}
-.course .date{font-size:18px;font-weight:900}
-.course-foot{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-top:16px;color:var(--muted)}
-.seats{font-weight:900;color:var(--green)}
-.seats.full{color:var(--red)}
-.card{background:rgba(255,253,247,.96);border:1px solid rgba(232,223,207,.75);border-radius:22px;padding:22px;margin-top:16px;box-shadow:var(--shadow)}
-.card h2{margin:0 0 16px;font-size:21px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.full{grid-column:1/-1}
-label{display:block;font-size:14px;font-weight:900;margin-bottom:7px}
-input,textarea,select{
-  width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:13px;padding:13px 14px;outline:none
-}
-input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,75,143,.08)}
-textarea{min-height:90px;resize:vertical}
-.summary{margin:15px 0;padding:13px 14px;border:1px solid var(--line);background:#fff8e8;border-radius:13px}
-.btn{border:none;border-radius:13px;padding:14px 16px;font-weight:900;cursor:pointer}
-.btn-primary{width:100%;background:var(--orange);color:#222}
-.btn-primary:disabled{background:#d9d0c5;color:#8b8278;cursor:not-allowed}
-.btn-blue{background:var(--blue);color:white}
-.btn-light{background:white;border:1px solid var(--line);color:var(--text)}
-.btn-danger{background:#fff0ef;color:var(--red);border:1px solid #ffd1cd}
-.msg{display:none;margin-top:12px;padding:13px 14px;border-radius:13px;font-weight:800}
-.msg.show{display:block}
-.msg.ok{background:#eaf8f0;color:#166534}
-.msg.err{background:#fff0ef;color:#9f1c12}
-.msg.wait{background:#f1edff;color:#5b45b8}
-.notice{color:var(--muted);font-size:13px;line-height:1.7;margin-top:12px}
-.admin-login{max-width:420px}
-.admin-toolbar{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
-.stat{background:#fff8e8;border:1px solid var(--line);border-radius:16px;padding:15px}
-.stat .num{font-size:28px;font-weight:950;color:var(--blue);margin-top:3px}
-.filters{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:10px;margin:14px 0}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px;background:white}
-table{width:100%;border-collapse:collapse;min-width:1020px}
-th,td{padding:11px 10px;border-bottom:1px solid #eee8de;text-align:left;font-size:13px;vertical-align:top}
-th{background:#f7f9fc;color:#526071;position:sticky;top:0;z-index:1}
-.status{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:900}
-.s-pending{background:#fff5d9;color:#8a5b00}
-.s-confirmed{background:#e9f8ef;color:#17633f}
-.s-wait{background:#f1edff;color:#5b45b8}
-.s-cancel{background:#f4f4f5;color:#777}
-.s-paid{background:#e9f8ef;color:#17633f}
-.s-unpaid{background:#fff0ef;color:#9f1c12}
-.row-actions{display:flex;gap:6px;flex-wrap:wrap}
-.small{padding:7px 9px;border-radius:9px;font-size:12px}
-.empty{padding:28px;text-align:center;color:var(--muted)}
-.admin-note{min-width:160px}
-.booking-code{font-family:ui-monospace,Consolas,monospace;font-size:12px}
-.footer{text-align:center;color:#8993a2;font-size:12px;margin-top:26px}
-.modal{
-  position:fixed;inset:0;background:rgba(12,24,38,.48);display:none;align-items:center;justify-content:center;padding:18px;z-index:50
-}
-.modal.show{display:flex}
-.modal-box{width:min(520px,100%);background:white;border-radius:20px;padding:22px;box-shadow:0 25px 80px rgba(0,0,0,.25)}
-.modal-box h3{margin-top:0}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
+:root{--b:#1B4B8F;--o:#F5A623;--n:#0d3155;--r:#b42318;--g:#16794f;--m:#6b7280;--l:#e6dcc8;--bg:#fff8e8}
+*{box-sizing:border-box}body{margin:0;font-family:"Microsoft JhengHei",sans-serif;background:linear-gradient(#fff8e8,#f6f8fb);color:#172033}
+.wrap{max-width:1120px;margin:auto;padding:16px}.hero{background:linear-gradient(135deg,#0d3155,#0e5b88);color:#fff;border-radius:24px;padding:28px;box-shadow:0 15px 40px #1232}
+.hero h1{margin:8px 0;font-size:32px}.hero p{margin:0;color:#dcecff}.price{margin-top:16px;font-weight:900;font-size:19px}.price b{font-size:36px;color:#ffc15a}
+.pay{margin-top:12px;display:inline-block;background:#fff0e5;border:2px solid #ff9e61;color:#9a2f13;padding:11px 16px;border-radius:13px;font-size:25px;font-weight:950}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}.tab{border:0;border-radius:12px;padding:13px;font-weight:900;background:#ffe8d4}.tab.active{background:#0e5b88;color:#fff}
+.panel{display:none}.panel.active{display:block}.courses,.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.course,.card,.setcard{background:#fffdf7;border:1px solid var(--l);border-radius:18px;padding:18px;box-shadow:0 8px 24px #1231}.course h3,.setcard h3{margin:6px 0;color:var(--b)}
+.sessions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.ses{border:1px solid var(--l);background:#fff;border-radius:11px;padding:10px;text-align:left}.ses.sel{border:2px solid var(--o);background:#fff7e8;box-shadow:0 0 0 2px #f5a62322}.ses{position:relative;cursor:pointer}.ses.sel:after{content:"✓";position:absolute;right:8px;top:6px;font-weight:950;color:#9a5b00}.ses:disabled{opacity:.45}
+.card{margin-top:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}label{display:block;font-weight:800;font-size:14px;margin:6px 0}
+input,textarea,select{width:100%;padding:11px;border:1px solid var(--l);border-radius:11px;background:#fff}textarea{min-height:82px}.summary{margin:12px 0;padding:12px;background:#fff7e7;border:1px solid var(--l);border-radius:11px}
+.btn{border:0;border-radius:11px;padding:11px 13px;font-weight:900;cursor:pointer}.primary{width:100%;background:var(--o)}.blue{background:var(--b);color:#fff}.light{background:#fff;border:1px solid var(--l)}.danger{background:#fff0ef;color:var(--r);border:1px solid #ffc9c4}
+.msg{display:none;margin-top:10px;padding:11px;border-radius:11px;font-weight:800}.msg.show{display:block}.ok{background:#eaf8f0;color:#166534}.err{background:#fff0ef;color:#9f1c12}.wait{background:#f1edff;color:#5b45b8}
+.safety{margin-top:15px;background:#fffaf0;border:1px solid #efd9aa;border-radius:14px;padding:15px;line-height:1.7}.safety h3{color:var(--n);margin-top:0}
+.toolbar{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.stat{background:#fff7e7;border:1px solid var(--l);border-radius:13px;padding:12px}.num{font-size:26px;font-weight:950;color:var(--b)}
+.inline{display:grid;grid-template-columns:1fr 1fr;gap:7px}.check{display:flex;gap:7px;align-items:center;margin:7px 0}.check input{width:auto}.filters{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:7px;margin:12px 0}
+.tbl{overflow:auto;border:1px solid var(--l);border-radius:13px;background:#fff}table{width:100%;border-collapse:collapse;min-width:1180px}th,td{padding:9px;border-bottom:1px solid #eee6d8;text-align:left;font-size:13px;vertical-align:top}th{background:#f7f9fc}
+.badge{display:inline-block;padding:4px 7px;border-radius:999px;font-size:12px;font-weight:900}.b1{background:#fff5d9;color:#8a5b00}.b2{background:#e9f8ef;color:#17633f}.b3{background:#f1edff;color:#5b45b8}.b4{background:#eee;color:#666}.paid{background:#e9f8ef;color:#17633f}.unpaid{background:#fff0ef;color:#9f1c12}
+.modal{display:none;position:fixed;inset:0;background:#0007;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}.modalbox{background:#fff;border-radius:16px;padding:18px;width:min(520px,100%)}
+@media(max-width:800px){.courses,.settings,.grid2,.stats,.filters{grid-template-columns:1fr}.full{grid-column:auto}.hero h1{font-size:27px}.pay{font-size:22px}}
+</style></head><body><div class="wrap">
+<section class="hero"><div style="font-weight:900">丙級檢定練習｜教室租借登記</div><h1>丙級術科自費練習登記</h1><p>蛋糕丙級・中餐丙級・麵包丙級｜上午／下午可複選</p><div class="price">自費練習 <b>$1,500</b>／人</div><div class="pay">⚠ 現場繳費</div></section>
+<div class="tabs"><button class="tab active" data-tab="student">學員登記</button><button class="tab" data-tab="admin">管理員後台</button></div>
 
-.safety-notice{
-  margin-top:16px;
-  background:#fffaf0;
-  border:1px solid #efd9aa;
-  border-radius:16px;
-  padding:16px 18px;
-  color:#3c3428;
-  font-size:14px;
-  line-height:1.75;
-}
-.safety-title{
-  font-size:18px;
-  font-weight:950;
-  color:#0d3155;
-  margin-bottom:10px;
-}
-.safety-item{
-  padding:10px 0;
-  border-bottom:1px dashed #e5d5b6;
-}
-.safety-item:last-child{border-bottom:none}
-.danger-box{
-  margin-top:8px;
-  padding:12px 14px;
-  background:#fff1e8;
-  border:1px solid #ffc89e;
-  border-radius:12px;
-  color:#7b2f00;
-}
-.example{
-  margin-top:7px;
-  font-weight:800;
-}
+<section id="student" class="panel active"><div id="syncState" style="font-size:13px;color:var(--m);margin-bottom:8px">場次先顯示，正在同步最新名額…</div><div id="courseGrid" class="courses"></div>
+<div class="card"><h2>填寫登記資料</h2><div class="grid2"><div><label>姓名 *</label><input id="name"></div><div><label>手機 *</label><input id="phone" inputmode="tel"></div><div class="full"><label>備註</label><textarea id="note"></textarea></div></div>
+<div id="summary" class="summary">可複選多個練習場次，再一次送出。</div><button id="submitBtn" class="btn primary" disabled>送出登記</button><div id="msg" class="msg"></div>
+<div class="safety"><h3>三、租借流程與安全注意事項</h3>
+<p><b>1. 設備檢查：</b><br>進場練習前，請先確認使用設備、器具及工作區域是否正常；如有異常或損壞，請立即告知管理人員。</p>
+<p><b>2. 復原、清洗與離場檢查：</b><br>自己的練習區域需完成掃地＋拖地，並將使用物品復原歸位。</p>
+<p><b>設備清洗：</b> 攪拌鋼盆、攪拌鉤、烤盤等工具需用中性洗劑洗淨並擦乾。</p>
+<p><b>3. 模擬考押金：</b><br>為維持學員練習與下一組學員練習，模擬考期間請勿有分心或浪費時間的行為。須收押金 <b>$300 元</b>，時間內結束並完成場地復原後退回。</p>
+<p><b>4. 超時收費：</b><br>考試時間結束後，清潔＋打包包含在內 30 分鐘；超時押金不退。<br>例如：12:00 考試結束，清潔與打包須於 12:30 前完成。</p></div></div></section>
 
-@media(max-width:760px){
-  .wrap{padding:14px 12px 40px} .hero{padding:24px 20px;border-radius:22px} h1{font-size:28px}
-  .course-grid,.form-grid,.stats,.filters{grid-template-columns:1fr}
-  .full{grid-column:auto} .tabs{grid-template-columns:1fr 1fr}
-}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <section class="hero">
-    <span class="eyebrow">丙級檢定練習｜教室租借登記</span>
-    <h1>丙級術科自費練習登記</h1>
-    <p>線上登記、名額同步、額滿候補。每場正式名額最多 6 人。</p>
-    <div class="price">自費練習 <strong>$1,500</strong>／人</div>
-  </section>
+<section id="admin" class="panel"><div id="loginCard" class="card"><h2>管理員登入</h2><div style="max-width:420px"><label>管理員密碼</label><input id="adminPassword" type="password"><button id="loginBtn" class="btn blue" style="width:100%;margin-top:8px">登入</button></div></div>
+<div id="dashboard" style="display:none">
+<div class="card"><div class="toolbar"><h2 style="margin:0">練習場次設定</h2><button id="refreshBtn" class="btn light">重新整理</button></div><p style="color:var(--m)">之後改日期、上午／下午開放、名額上限，都在這裡改，不必再改 GitHub。</p><div id="settingsGrid" class="settings"></div></div>
+<div class="card"><div class="toolbar"><h2 style="margin:0">報名管理</h2><button id="exportBtn" class="btn light">匯出 CSV</button></div>
+<div class="stats"><div class="stat">全部<div class="num" id="totalN">0</div></div><div class="stat">正式<div class="num" id="activeN">0</div></div><div class="stat">候補<div class="num" id="waitN">0</div></div><div class="stat">已付款<div class="num" id="paidN">0</div></div></div>
+<div class="filters"><input id="searchInput" placeholder="搜尋姓名、手機、報名編號"><select id="courseFilter"><option value="">全部項目</option></select><select id="statusFilter"><option value="">全部狀態</option><option>待確認</option><option>已確認</option><option>候補</option><option>已取消</option></select></div>
+<div class="tbl"><table><thead><tr><th>報名編號</th><th>項目</th><th>時段</th><th>姓名</th><th>手機</th><th>狀態</th><th>付款</th><th>備註</th><th>管理備註</th><th>時間</th><th>操作</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+</div></div></section>
+<div style="text-align:center;color:#8a93a2;font-size:12px;margin-top:22px">丙級練習教室登記系統 V3.5</div></div>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="student">學員登記</button>
-    <button class="tab" data-tab="admin">管理員後台</button>
-  </div>
-
-  <section id="student" class="panel active">
-    <div class="course-grid" id="courseGrid"></div>
-
-    <div class="card">
-      <h2>填寫登記資料</h2>
-      <div class="form-grid">
-        <div>
-          <label>姓名 *</label>
-          <input id="name" maxlength="30" placeholder="請輸入姓名">
-        </div>
-        <div>
-          <label>手機 *</label>
-          <input id="phone" inputmode="tel" maxlength="20" placeholder="09xx-xxx-xxx">
-        </div>
-        <div class="full">
-          <label>備註</label>
-          <textarea id="note" maxlength="300" placeholder="例如：想加強刀工、抹面、流程熟悉等"></textarea>
-        </div>
-      </div>
-      <div class="summary" id="summary">請先選擇練習項目。</div>
-      <button class="btn btn-primary" id="submitBtn" disabled>送出登記</button>
-      <div class="msg" id="msg"></div>
-      <div class="notice safety-notice">
-        <div class="safety-title">三、租借流程與安全注意事項</div>
-
-        <div class="safety-item">
-          <strong>1. 設備檢查：</strong>
-          <div>進場練習前，請先確認使用設備、器具及工作區域是否正常；如有異常或損壞，請立即告知管理人員。</div>
-        </div>
-
-        <div class="safety-item">
-          <strong>2. 復原、清洗與離場檢查：</strong>
-          <div>自己的練習區域需完成掃地＋拖地，並將使用物品復原歸位。</div>
-          <div style="margin-top:6px"><strong>設備清洗：</strong>攪拌鋼盆、攪拌鉤、烤盤等工具，需使用中性洗劑洗淨並擦乾。</div>
-        </div>
-
-        <div class="safety-item">
-          <strong>3. 模擬考押金：</strong>
-          <div>為維持學員練習品質及下一組學員使用權益，模擬考期間請勿有分心或浪費時間的行為。每人須收取<strong>押金 $300 元</strong>，於規定時間內完成並確認場地復原後退回。</div>
-        </div>
-
-        <div class="safety-item danger-box">
-          <strong>4. 超時收費：</strong>
-          <div>考試時間結束後，另提供 <strong>30 分鐘</strong>完成清潔與打包；清潔、打包時間包含在內。<strong>超過 30 分鐘，押金不退。</strong></div>
-          <div class="example">例如：12:00 考試結束，清潔與打包須於 12:30 前完成；超過 12:30 視為超時。</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="admin" class="panel">
-    <div class="card" id="adminLoginCard">
-      <h2>管理員登入</h2>
-      <div class="admin-login">
-        <label>管理員密碼</label>
-        <input id="adminPassword" type="password" placeholder="請輸入管理員密碼">
-        <button class="btn btn-blue" id="adminLoginBtn" style="width:100%;margin-top:10px">登入管理後台</button>
-      </div>
-      <div class="notice">管理密碼由 Apps Script 伺服器端驗證，不寫在這個網頁裡。</div>
-    </div>
-
-    <div class="card" id="adminDashboard" style="display:none">
-      <div class="admin-toolbar">
-        <div>
-          <h2 style="margin-bottom:4px">報名管理總覽</h2>
-          <div style="font-size:13px;color:var(--muted)">可查看名單、付款、候補與取消狀態。</div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-light" id="refreshAdminBtn">重新整理</button>
-          <button class="btn btn-light" id="exportBtn">匯出 CSV</button>
-        </div>
-      </div>
-
-      <div class="stats">
-        <div class="stat"><div>全部登記</div><div class="num" id="totalN">0</div></div>
-        <div class="stat"><div>蛋糕正式</div><div class="num" id="cakeN">0 / 6</div></div>
-        <div class="stat"><div>中餐正式</div><div class="num" id="cookN">0 / 6</div></div>
-        <div class="stat"><div>候補人數</div><div class="num" id="waitN">0</div></div>
-      </div>
-
-      <div class="filters">
-        <input id="searchInput" placeholder="搜尋姓名、手機、報名編號">
-        <select id="courseFilter">
-          <option value="">全部項目</option>
-          <option value="cake">蛋糕丙級</option>
-          <option value="cook">中餐丙級</option>
-        </select>
-        <select id="statusFilter">
-          <option value="">全部狀態</option>
-          <option>待確認</option>
-          <option>已確認</option>
-          <option>候補</option>
-          <option>已取消</option>
-        </select>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>報名編號</th><th>項目</th><th>姓名</th><th>手機</th><th>報名狀態</th>
-              <th>付款</th><th>備註</th><th>管理備註</th><th>登記時間</th><th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="adminRows"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <div class="footer">丙級練習教室登記系統 V3.3</div>
-</div>
-
-<div class="modal" id="editModal">
-  <div class="modal-box">
-    <h3>編輯報名資料</h3>
-    <div style="display:grid;gap:11px">
-      <div><label>報名狀態</label>
-        <select id="editBookingStatus">
-          <option>待確認</option><option>已確認</option><option>候補</option><option>已取消</option>
-        </select>
-      </div>
-      <div><label>付款狀態</label>
-        <select id="editPaymentStatus">
-          <option>未付款</option><option>已付款</option><option>退款</option>
-        </select>
-      </div>
-      <div><label>管理備註</label><textarea id="editAdminNote" placeholder="例如：已電話確認、預計匯款"></textarea></div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-light" id="closeModalBtn">取消</button>
-      <button class="btn btn-blue" id="saveEditBtn">儲存</button>
-    </div>
-  </div>
-</div>
+<div id="editModal" class="modal"><div class="modalbox"><h3>編輯報名資料</h3><label>時段</label><select id="editSession"><option>上午</option><option>下午</option><option>未指定</option></select><label>報名狀態</label><select id="editStatus"><option>待確認</option><option>已確認</option><option>候補</option><option>已取消</option></select><label>付款狀態</label><select id="editPay"><option>未付款</option><option>已付款</option><option>退款</option></select><label>管理備註</label><textarea id="editNote"></textarea><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px"><button id="closeEdit" class="btn light">取消</button><button id="saveEdit" class="btn blue">儲存</button></div></div></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxWtm1knsQuoSCE65-cKnA-_qMWWfO33dK7KS2frPtwz9oQZpiToHHpOK4RQWO3O0u10w/exec";
-const MAX = 6;
-let selectedCourse = null;
-let publicData = { courses:{} };
-let adminPassword = "";
-let adminData = { bookings:[], courses:{} };
-let editingId = "";
+const API_URL='https://script.google.com/macros/s/AKfycbxWtm1knsQuoSCE65-cKnA-_qMWWfO33dK7KS2frPtwz9oQZpiToHHpOK4RQWO3O0u10w/exec';
+const FALLBACK={cake:{id:'cake',title:'蛋糕丙級',date:'10/21（三）',price:1500,active:true,morning:{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false},afternoon:{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false}},cook:{id:'cook',title:'中餐丙級',date:'11/4（三）',price:1500,active:true,morning:{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false},afternoon:{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false}},bread:{id:'bread',title:'麵包丙級',date:'日期待公告',price:1500,active:true,morning:{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false},afternoon:{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false}}};
+let publicData={courses:JSON.parse(JSON.stringify(FALLBACK))},selected=new Set(),adminPassword="",adminData={bookings:[],settings:[]},editingId="";
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[s]));
+function msg(t,c="ok"){const e=$("msg");e.className="msg show "+c;e.textContent=t}function dt(v){if(!v)return"—";const d=new Date(v);return isNaN(d)?v:d.toLocaleString("zh-TW")}
+async function getPublic(){const r=await fetch(API_URL+'?action=publicStatus&t='+Date.now(),{cache:'no-store'}),tx=await r.text();if(tx.trim().startsWith('<'))throw Error('Apps Script 尚未公開');const d=JSON.parse(tx);if(!d.success)throw Error(d.message||'讀取失敗');publicData=d;try{localStorage.setItem('practice_v35_cache',JSON.stringify(d))}catch(e){}return d}
+async function post(p){const r=await fetch(API_URL,{method:"POST",redirect:"follow",body:JSON.stringify(p)}),tx=await r.text();if(tx.trim().startsWith("<"))throw Error("Apps Script 尚未公開");const d=JSON.parse(tx);if(!d.success)throw Error(d.message||"操作失敗");return d}
 
-const COURSES = {
-  cake: { title:"蛋糕丙級", date:"10/21（三）", subtitle:"蛋糕術科練習" },
-  cook: { title:"中餐丙級", date:"11/4（三）", subtitle:"中餐術科練習" }
-};
+function renderCourses(){const g=$("courseGrid");g.innerHTML="";Object.values(publicData.courses||FALLBACK).filter(c=>c.active!==false).forEach(c=>{const d=document.createElement("div");d.className="course";const btn=(k,label)=>{const s=c[k]||{enabled:true,limit:6,count:0,remaining:6,waitlist:0,full:false},key=c.id+"|"+label,sel=selected.has(key);return `<button class="ses ${sel?"sel":""}" data-k="${key}" ${!s.enabled?"disabled":""}><b>${label}</b><br><small>${s.enabled?(s.full?`已額滿｜候補 ${s.waitlist||0} 人`:`${s.count||0} / ${s.limit||6}｜剩 ${s.remaining??(s.limit||6)} 名`):"未開放"}</small></button>`};d.innerHTML=`<small style="font-weight:900;color:#225a98">${esc(c.title)}練習</small><h3>${esc(c.title)}</h3><b>${esc(c.date||"日期待公告")}</b><div style="margin-top:6px;color:#666">自費 $${Number(c.price||1500).toLocaleString()}｜<b style="color:#a33112">現場繳費</b></div><div class="sessions">${btn("morning","上午")}${btn("afternoon","下午")}</div>`;g.appendChild(d)});document.querySelectorAll(".ses:not(:disabled)").forEach(b=>b.onclick=()=>{const k=b.dataset.k;selected.has(k)?selected.delete(k):selected.add(k);renderCourses();summary()})}
+function summary(){if(!selected.size){$("summary").textContent="可複選多個練習場次，再一次送出。";$("submitBtn").disabled=true;return}const chips=[...selected].map(k=>{const [cid,ses]=k.split("|"),c=publicData.courses[cid]||FALLBACK[cid];return `<span style="display:inline-block;background:#edf5ff;color:#225a98;border-radius:999px;padding:5px 9px;margin:3px;font-weight:900">${esc(c.title)}・${ses}</span>`}).join("");$("summary").innerHTML=`已選 <b>${selected.size}</b> 個場次：<div style="margin-top:6px">${chips}</div><div style="margin-top:7px;color:#a33112;font-weight:900">現場繳費｜每場 $1,500</div>`;$("submitBtn").disabled=false}
+async function refreshPublic(){try{await getPublic();$("syncState").textContent="已同步最新場次與剩餘名額"}catch(e){$("syncState").textContent="目前使用快取/預設資料，網路恢復後會更新"}renderCourses();summary()}
 
-function esc(v){
-  return String(v??"").replace(/[&<>"']/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[s]));
-}
-function fmtDate(v){
-  if(!v) return "—";
-  const d = new Date(v);
-  return isNaN(d) ? esc(v) : d.toLocaleString("zh-TW");
-}
-function showMsg(text,type="ok"){
-  const el=document.getElementById("msg");
-  el.className="msg show "+type;
-  el.textContent=text;
-}
-async function getPublic(){
-  const res=await fetch(API_URL+"?action=publicStatus&t="+Date.now(),{cache:"no-store",redirect:"follow"});
-  const text=await res.text();
-  if(text.trim().startsWith("<")) throw new Error("Apps Script 尚未設為可公開存取");
-  const data=JSON.parse(text);
-  if(!data.success) throw new Error(data.message||"讀取失敗");
-  publicData=data;
-  return data;
-}
-async function postApi(payload){
-  const res=await fetch(API_URL,{
-    method:"POST",
-    redirect:"follow",
-    body:JSON.stringify(payload)
-  });
-  const text=await res.text();
-  if(text.trim().startsWith("<")) throw new Error("Apps Script 尚未設為可公開存取");
-  const data=JSON.parse(text);
-  if(!data.success) throw new Error(data.message||"操作失敗");
-  return data;
-}
+$("submitBtn").onclick=async()=>{const name=$("name").value.trim(),phone=$("phone").value.replace(/\D/g,""),note=$("note").value.trim();if(!selected.size)return msg("請至少選擇一個練習場次","err");if(!name)return msg("請填寫姓名","err");if(!/^09\d{8}$/.test(phone))return msg("請輸入正確手機號碼","err");const choices=[...selected].map(k=>{const [courseId,session]=k.split("|");return{courseId,session}}),b=$("submitBtn");try{b.disabled=true;b.textContent="資料送出中…";msg(`正在送出 ${choices.length} 個場次，請勿重複按送出。`,"wait");await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"registerBatch",selections:choices,name,phone,note})});await new Promise(r=>setTimeout(r,1300));$("name").value=$("phone").value=$("note").value="";selected.clear();msg(`已送出 ${choices.length} 個練習場次，請勿重複登記。`,"ok");await refreshPublic().catch(()=>{})}catch(e){msg("目前無法連線，請稍後再試。","err")}finally{b.textContent="送出登記";summary()}};
 
-function renderCourses(){
-  const grid=document.getElementById("courseGrid");
-  grid.innerHTML="";
-  Object.entries(COURSES).forEach(([id,c])=>{
-    const s=publicData.courses?.[id] || {count:0,remaining:MAX,waitlist:0,full:false};
-    const el=document.createElement("div");
-    el.className="course"+(selectedCourse===id?" selected":"");
-    el.innerHTML=`
-      <span class="pill">${c.subtitle}</span>
-      <h3>${c.title}</h3>
-      <div class="date">${c.date}</div>
-      <div class="course-foot">
-        <div>自費 <b>$1,500</b></div>
-        <div style="text-align:right">
-          <div class="seats ${s.full?"full":""}">${s.full?"正式名額已滿":`${s.count} / ${MAX} 人`}</div>
-          ${s.full?`<small>候補 ${s.waitlist} 人</small>`:`<small>剩 ${s.remaining} 名</small>`}
-        </div>
-      </div>`;
-    el.onclick=()=>{selectedCourse=id;renderCourses();updateSummary();};
-    grid.appendChild(el);
-  });
-}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.tab).classList.add("active")});
 
-function updateSummary(){
-  const box=document.getElementById("summary");
-  const btn=document.getElementById("submitBtn");
-  if(!selectedCourse){
-    box.textContent="請先選擇「蛋糕丙級」或「中餐丙級」。";btn.disabled=true;return;
-  }
-  const c=COURSES[selectedCourse];
-  const s=publicData.courses?.[selectedCourse] || {count:0,remaining:MAX,waitlist:0,full:false};
-  if(s.full){
-    box.innerHTML=`已選擇：<b>${c.title}</b>｜${c.date}｜正式名額已滿，送出後將列為 <b>候補</b>。`;
-  }else{
-    box.innerHTML=`已選擇：<b>${c.title}</b>｜${c.date}｜自費 <b>$1,500</b>｜剩餘 <b>${s.remaining}</b> 名`;
-  }
-  btn.disabled=false;
-}
+$("loginBtn").onclick=async()=>{const p=$("adminPassword").value;if(!p)return alert("請輸入管理員密碼");try{adminData=await post({action:"adminList",adminPassword:p});adminPassword=p;$("loginCard").style.display="none";$("dashboard").style.display="block";renderSettings();renderAdmin()}catch(e){alert(e.message)}};
+async function refreshAdmin(){adminData=await post({action:"adminList",adminPassword});renderSettings();renderAdmin();await refreshPublic()}$("refreshBtn").onclick=()=>refreshAdmin().catch(e=>alert(e.message));
 
-async function refreshPublic(){
-  try{await getPublic();renderCourses();updateSummary();}
-  catch(e){showMsg("目前無法連線："+e.message,"err");renderCourses();}
-}
+function renderSettings(){const g=$("settingsGrid");g.innerHTML="";(adminData.settings||[]).forEach(c=>{const d=document.createElement("div");d.className="setcard";d.innerHTML=`<h3>${esc(c.title)}</h3><label>項目名稱</label><input id="t_${c.id}" value="${esc(c.title)}"><label>練習日期</label><input id="d_${c.id}" value="${esc(c.date)}"><div class="inline"><div><label>上午上限</label><input id="ml_${c.id}" type="number" min="1" value="${c.morningLimit}"></div><div><label>下午上限</label><input id="al_${c.id}" type="number" min="1" value="${c.afternoonLimit}"></div></div><div class="check"><input id="me_${c.id}" type="checkbox" ${c.morningEnabled?"checked":""}><span>開放上午</span></div><div class="check"><input id="ae_${c.id}" type="checkbox" ${c.afternoonEnabled?"checked":""}><span>開放下午</span></div><div class="check"><input id="ac_${c.id}" type="checkbox" ${c.active?"checked":""}><span>顯示此項目</span></div><label>費用</label><input id="p_${c.id}" type="number" value="${c.price}"><button class="btn blue" style="width:100%;margin-top:8px" onclick="saveSet('${c.id}')">儲存設定</button>`;g.appendChild(d)});const cf=$("courseFilter"),cur=cf.value;cf.innerHTML='<option value="">全部項目</option>'+(adminData.settings||[]).map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join("");cf.value=cur}
+window.saveSet=async id=>{try{await post({action:"updateCourseSettings",adminPassword,courseId:id,title:$("t_"+id).value.trim(),date:$("d_"+id).value.trim(),morningEnabled:$("me_"+id).checked,morningLimit:Number($("ml_"+id).value),afternoonEnabled:$("ae_"+id).checked,afternoonLimit:Number($("al_"+id).value),price:Number($("p_"+id).value),active:$("ac_"+id).checked});alert("場次設定已更新");await refreshAdmin()}catch(e){alert(e.message)}};
 
-document.getElementById("submitBtn").onclick=async()=>{
-  const name=document.getElementById("name").value.trim();
-  const phone=document.getElementById("phone").value.trim();
-  const note=document.getElementById("note").value.trim();
-
-  if(!selectedCourse) return showMsg("請先選擇練習項目","err");
-  if(!name) return showMsg("請填寫姓名","err");
-
-  const digits=phone.replace(/\D/g,"");
-  if(!/^09\d{8}$/.test(digits)){
-    return showMsg("請輸入正確手機號碼，例如：0912345678","err");
-  }
-
-  const btn=document.getElementById("submitBtn");
-  const courseId=selectedCourse;
-  const before=publicData.courses?.[courseId] || {count:0,waitlist:0,full:false};
-
-  try{
-    btn.disabled=true;
-    btn.textContent="資料送出中…";
-    showMsg("資料送出中，請勿重複按送出。","wait");
-
-    // GitHub Pages / LINE / Safari 對 Apps Script 的 POST 回應可能出現跨網域誤判。
-    // 使用 no-cors：只把資料送到 Apps Script，不讀取 POST 回應。
-    await fetch(API_URL,{
-      method:"POST",
-      mode:"no-cors",
-      redirect:"follow",
-      body:JSON.stringify({
-        action:"register",
-        courseId,
-        name,
-        phone:digits,
-        note
-      })
-    });
-
-    // 等待後端寫入 Google Sheet
-    await new Promise(r=>setTimeout(r,1500));
-
-    // 再透過公開 GET 重新取得名額
-    let refreshed=false;
-    for(let i=0;i<3;i++){
-      try{
-        await getPublic();
-        refreshed=true;
-        break;
-      }catch(e){
-        await new Promise(r=>setTimeout(r,900));
-      }
-    }
-
-    renderCourses();
-
-    const after=publicData.courses?.[courseId] || before;
-
-    document.getElementById("name").value="";
-    document.getElementById("phone").value="";
-    document.getElementById("note").value="";
-    selectedCourse=null;
-
-    if(refreshed && Number(after.count)>Number(before.count)){
-      showMsg(`登記完成，目前正式名額 ${after.count} / ${MAX}。請勿重複送出。`,"ok");
-    }else if(refreshed && (before.full || after.full)){
-      showMsg("登記資料已送出。正式名額已滿時，系統會自動列入候補；請勿重複送出。","ok");
-    }else{
-      showMsg("登記資料已送出，系統正在處理。請勿重複送出；稍後重新整理即可確認最新名額。","ok");
-    }
-
-    btn.textContent="已送出，請勿重複登記";
-
-    // 防止學員連續重複送出
-    await new Promise(r=>setTimeout(r,5000));
-
-  }catch(e){
-    showMsg("目前無法連線，請檢查手機網路後再試一次。","err");
-  }finally{
-    btn.textContent="送出登記";
-    try{
-      await getPublic();
-      renderCourses();
-    }catch(e){}
-    updateSummary();
-  }
-};
-
-document.querySelectorAll(".tab").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");document.getElementById(btn.dataset.tab).classList.add("active");
-  };
-});
-
-document.getElementById("adminLoginBtn").onclick=async()=>{
-  const pwd=document.getElementById("adminPassword").value;
-  if(!pwd) return alert("請輸入管理員密碼");
-  try{
-    const data=await postApi({action:"adminList",adminPassword:pwd});
-    adminPassword=pwd;adminData=data;
-    document.getElementById("adminLoginCard").style.display="none";
-    document.getElementById("adminDashboard").style.display="block";
-    renderAdmin();
-  }catch(e){alert(e.message);}
-};
-
-async function refreshAdmin(){
-  const data=await postApi({action:"adminList",adminPassword});
-  adminData=data;renderAdmin();await refreshPublic();
-}
-document.getElementById("refreshAdminBtn").onclick=()=>refreshAdmin().catch(e=>alert(e.message));
-
-function statusClass(s){
-  if(s==="待確認") return "s-pending";
-  if(s==="已確認") return "s-confirmed";
-  if(s==="候補") return "s-wait";
-  return "s-cancel";
-}
-function paymentClass(s){return s==="已付款"?"s-paid":"s-unpaid"}
-
-function filteredRows(){
-  const q=document.getElementById("searchInput").value.trim().toLowerCase();
-  const cf=document.getElementById("courseFilter").value;
-  const sf=document.getElementById("statusFilter").value;
-  return (adminData.bookings||[]).filter(r=>{
-    const hit=!q || [r.bookingId,r.name,r.phone].some(v=>String(v||"").toLowerCase().includes(q));
-    return hit && (!cf || r.courseId===cf) && (!sf || r.bookingStatus===sf);
-  });
-}
-["searchInput","courseFilter","statusFilter"].forEach(id=>document.getElementById(id).addEventListener("input",renderAdmin));
-
-function renderAdmin(){
-  const rows=adminData.bookings||[];
-  const active=id=>rows.filter(r=>r.courseId===id && ["待確認","已確認"].includes(r.bookingStatus)).length;
-  document.getElementById("totalN").textContent=rows.length;
-  document.getElementById("cakeN").textContent=`${active("cake")} / ${MAX}`;
-  document.getElementById("cookN").textContent=`${active("cook")} / ${MAX}`;
-  document.getElementById("waitN").textContent=rows.filter(r=>r.bookingStatus==="候補").length;
-
-  const tbody=document.getElementById("adminRows");
-  const list=filteredRows();
-  if(!list.length){tbody.innerHTML=`<tr><td colspan="10" class="empty">沒有符合條件的資料</td></tr>`;return;}
-  tbody.innerHTML=list.map(r=>`
-    <tr>
-      <td class="booking-code">${esc(r.bookingId)}</td>
-      <td><b>${esc(r.courseTitle)}</b><br><small>${esc(r.date)}</small></td>
-      <td>${esc(r.name)}</td><td>${esc(r.phone)}</td>
-      <td><span class="status ${statusClass(r.bookingStatus)}">${esc(r.bookingStatus)}</span></td>
-      <td><span class="status ${paymentClass(r.paymentStatus)}">${esc(r.paymentStatus)}</span></td>
-      <td>${esc(r.note||"—")}</td><td>${esc(r.adminNote||"—")}</td>
-      <td>${fmtDate(r.createdAt)}</td>
-      <td><div class="row-actions">
-        <button class="btn btn-light small" onclick="openEdit('${esc(r.bookingId)}')">編輯</button>
-        ${r.bookingStatus!=="已取消"?`<button class="btn btn-danger small" onclick="cancelRow('${esc(r.bookingId)}')">取消</button>`:""}
-      </div></td>
-    </tr>`).join("");
-}
-
-window.openEdit=id=>{
-  const r=(adminData.bookings||[]).find(x=>x.bookingId===id);
-  if(!r)return;
-  editingId=id;
-  document.getElementById("editBookingStatus").value=r.bookingStatus;
-  document.getElementById("editPaymentStatus").value=r.paymentStatus;
-  document.getElementById("editAdminNote").value=r.adminNote||"";
-  document.getElementById("editModal").classList.add("show");
-};
-document.getElementById("closeModalBtn").onclick=()=>document.getElementById("editModal").classList.remove("show");
-document.getElementById("saveEditBtn").onclick=async()=>{
-  try{
-    const data=await postApi({
-      action:"updateBooking",adminPassword,bookingId:editingId,
-      bookingStatus:document.getElementById("editBookingStatus").value,
-      paymentStatus:document.getElementById("editPaymentStatus").value,
-      adminNote:document.getElementById("editAdminNote").value.trim()
-    });
-    document.getElementById("editModal").classList.remove("show");
-    if(data.promoted) alert(`已取消名額，系統自動遞補：${data.promoted.name}（${data.promoted.phone}）`);
-    await refreshAdmin();
-  }catch(e){alert(e.message);}
-};
-
-window.cancelRow=async id=>{
-  if(!confirm("確定要把這筆報名標記為「已取消」？\n若有候補，系統會自動遞補第一位。")) return;
-  try{
-    const data=await postApi({action:"cancelBooking",adminPassword,bookingId:id});
-    if(data.promoted) alert(`已取消，並自動遞補：${data.promoted.name}（${data.promoted.phone}）`);
-    await refreshAdmin();
-  }catch(e){alert(e.message);}
-};
-
-document.getElementById("exportBtn").onclick=()=>{
-  const rows=filteredRows();
-  const data=[["報名編號","登記時間","項目","日期","姓名","手機","報名狀態","付款狀態","備註","管理備註","費用"]];
-  rows.forEach(r=>data.push([r.bookingId,fmtDate(r.createdAt),r.courseTitle,r.date,r.name,r.phone,r.bookingStatus,r.paymentStatus,r.note,r.adminNote,r.price]));
-  const csv=data.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
-  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="丙級練習登記名單.csv";a.click();URL.revokeObjectURL(a.href);
-};
-
-refreshPublic();
-setInterval(refreshPublic, 30000);
-</script>
-</body>
-</html>
+function filtered(){const q=$("searchInput").value.toLowerCase(),c=$("courseFilter").value,s=$("statusFilter").value;return(adminData.bookings||[]).filter(r=>(!q||[r.bookingId,r.name,r.phone].some(v=>String(v||"").toLowerCase().includes(q)))&&(!c||r.courseId===c)&&(!s||r.bookingStatus===s))}
+["searchInput","courseFilter","statusFilter"].forEach(id=>$(id).addEventListener("input",renderAdmin));
+function renderAdmin(){const rows=adminData.bookings||[];$("totalN").textContent=rows.length;$("activeN").textContent=rows.filter(r=>["待確認","已確認"].includes(r.bookingStatus)).length;$("waitN").textContent=rows.filter(r=>r.bookingStatus==="候補").length;$("paidN").textContent=rows.filter(r=>r.paymentStatus==="已付款").length;const tb=$("adminRows"),list=filtered();if(!list.length){tb.innerHTML='<tr><td colspan="11" style="text-align:center;padding:20px">沒有資料</td></tr>';return}tb.innerHTML=list.map(r=>`<tr><td>${esc(r.bookingId)}</td><td><b>${esc(r.courseTitle)}</b><br><small>${esc(r.date)}</small></td><td><b>${esc(r.session||"未指定")}</b></td><td>${esc(r.name)}</td><td>${esc(r.phone)}</td><td><span class="badge ${r.bookingStatus==="待確認"?"b1":r.bookingStatus==="已確認"?"b2":r.bookingStatus==="候補"?"b3":"b4"}">${esc(r.bookingStatus)}</span></td><td><span class="badge ${r.paymentStatus==="已付款"?"paid":"unpaid"}">${esc(r.paymentStatus)}</span></td><td>${esc(r.note||"—")}</td><td>${esc(r.adminNote||"—")}</td><td>${dt(r.createdAt)}</td><td><button class="btn light" onclick="openEdit('${r.bookingId}')">編輯</button> ${r.bookingStatus!=="已取消"?`<button class="btn danger" onclick="cancelRow('${r.bookingId}')">取消</button>`:""} <button class="btn danger" onclick="deleteRow('${r.bookingId}','${esc(r.name)}')">刪除</button></td></tr>`).join("")}
+window.openEdit=id=>{const r=(adminData.bookings||[]).find(x=>x.bookingId===id);if(!r)return;editingId=id;$("editSession").value=r.session||"未指定";$("editStatus").value=r.bookingStatus;$("editPay").value=r.paymentStatus;$("editNote").value=r.adminNote||"";$("editModal").classList.add("show")};$("closeEdit").onclick=()=>$("editModal").classList.remove("show");
+$("saveEdit").onclick=async()=>{try{const d=await post({action:"updateBooking",adminPassword,bookingId:editingId,session:$("editSession").value,bookingStatus:$("editStatus").value,paymentStatus:$("editPay").value,adminNote:$("editNote").value.trim()});$("editModal").classList.remove("show");if(d.promoted)alert("已自動遞補："+d.promoted.name);await refreshAdmin()}catch(e){alert(e.message)}};
+window.cancelRow=async id=>{if(!confirm("確定標記為已取消？"))return;try{const d=await post({action:"cancelBooking",adminPassword,bookingId:id});if(d.promoted)alert("已自動遞補："+d.promoted.name);await refreshAdmin()}catch(e){alert(e.message)}};
+window.deleteRow=async(id,name)=>{if(!confirm(`確定永久刪除「${name}」？刪除後無法復原。`))return;if(!confirm("再次確認：真的要永久刪除嗎？"))return;try{const d=await post({action:"deleteBooking",adminPassword,bookingId:id});if(d.promoted)alert("已刪除，並自動遞補："+d.promoted.name);else alert("資料已永久刪除");await refreshAdmin()}catch(e){alert(e.message)}};
+$("exportBtn").onclick=()=>{const rows=filtered(),a=[["報名編號","時間","項目","日期","時段","姓名","手機","狀態","付款","備註","管理備註","費用"]];rows.forEach(r=>a.push([r.bookingId,dt(r.createdAt),r.courseTitle,r.date,r.session,r.name,r.phone,r.bookingStatus,r.paymentStatus,r.note,r.adminNote,r.price]));const csv=a.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n"),blob=new Blob(["\uFEFF"+csv],{type:"text/csv"}),x=document.createElement("a");x.href=URL.createObjectURL(blob);x.download="丙級練習登記名單.csv";x.click()};
+try{const c=localStorage.getItem('practice_v35_cache');if(c)publicData=JSON.parse(c)}catch(e){}renderCourses();summary();setTimeout(refreshPublic,20);
+</script></body></html>
